@@ -1,0 +1,28 @@
+{
+  "name": "node_server_fauneral",
+  "version": "0.0.1",
+  "description": "Node server for my game",
+  "keywords": [
+    "node",
+    "server",
+    "game"
+  ],
+  "homepage": "https://github.com/TwoFacexx/node_server#readme",
+  "bugs": {
+    "url": "https://github.com/TwoFacexx/node_server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwoFacexx/node_server.git"
+  },
+  "license": "ISC",
+  "author": "PMoretti",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
