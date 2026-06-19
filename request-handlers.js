@@ -57,21 +57,31 @@ function getDataFromDatabase(req, res) {
         port: process.env.DATABASE_PORT,
         user: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
-        database: process.env.DATABASE_NAME
+        database: process.env.DATABASE_NAME,
+        ssl: { rejectUnauthorized: false }   //Aiven EXIGE SSL, mesmo para conexões locais
     });
     connection.connect();
 
-    connection.query('SELECT * FROM players_info', function (error, rows, fields) {
+    // Junta player + result e devolve colunas com os nomes que o Unity espera
+    const sql = `
+        SELECT  p.player_id              AS id,
+                p.name                   AS name,
+                COALESCE(SUM(r.rounds_won), 0) AS rounds_won
+        FROM        player p
+        LEFT JOIN   result r ON r.player_id = p.player_id
+        GROUP BY    p.player_id, p.name
+        ORDER BY    rounds_won DESC`;
+
+    connection.query(sql, function (error, rows, fields) {
         if (error) {
             console.error('Error fetching data from the database:', error);
             res.status(500).send('Error fetching data');
-        }
-        else{
+        } else {
             res.send(JSON.stringify({ _playerDataInfoArray: rows }));
         }
     });
     connection.end();
-};
+}
 function generateCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
