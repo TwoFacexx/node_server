@@ -3,7 +3,7 @@
 * Responsável pelo catálogo global de salas (matchmaking).
 */
 const mysql = require('mysql2');
-const config = require('./config/config.json');
+//const config = require('./config/config.json');
 const rooms = {}; // Estrutura em memória: { code: { ip, port, name, isPublic, maxPlayers, currentPlayers, createdAt } }
 
 // Limpeza automática: remove salas inativas há mais de 30 minutos
@@ -52,8 +52,13 @@ function postData(req, res) {
 }
 
 function getDataFromDatabase(req, res) {
-    const connection = mysql.createConnection(config.database);
-
+    const connection = mysql.createConnection({
+        host: process.env.DATABASE_HOST,
+        port: process.env.DATABASE_PORT,
+        user: process.env.DATABASE_USER,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME
+    });
     connection.connect();
 
     connection.query('SELECT * FROM players_info', function (error, rows, fields) {
